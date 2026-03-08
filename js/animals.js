@@ -6,7 +6,7 @@
 const ANIMALS = [
   {
     id: 'dog', nameCS: 'Pes', nameEN: 'Dog', emoji: '🐕',
-    accusativeCS: 'psa', accusativeEN: 'the dog',
+    accusativeCS: 'psa', accusativeEN: 'the dog', instrumentalCS: 'psem',
     placeholderColor: '#4A90D9',
     actions: {
       cs: [
@@ -51,7 +51,7 @@ const ANIMALS = [
   },
   {
     id: 'cat', nameCS: 'Kočka', nameEN: 'Cat', emoji: '🐈',
-    accusativeCS: 'kočku', accusativeEN: 'the cat',
+    accusativeCS: 'kočku', accusativeEN: 'the cat', instrumentalCS: 'kočkou',
     placeholderColor: '#9B59B6',
     actions: {
       cs: [
@@ -96,7 +96,7 @@ const ANIMALS = [
   },
   {
     id: 'rabbit', nameCS: 'Králík', nameEN: 'Rabbit', emoji: '🐇',
-    accusativeCS: 'králíka', accusativeEN: 'the rabbit',
+    accusativeCS: 'králíka', accusativeEN: 'the rabbit', instrumentalCS: 'králíkem',
     placeholderColor: '#E8A0BF',
     actions: {
       cs: [
@@ -141,7 +141,7 @@ const ANIMALS = [
   },
   {
     id: 'hamster', nameCS: 'Křeček', nameEN: 'Hamster', emoji: '🐹',
-    accusativeCS: 'křečka', accusativeEN: 'the hamster',
+    accusativeCS: 'křečka', accusativeEN: 'the hamster', instrumentalCS: 'křečkem',
     placeholderColor: '#F39C12',
     actions: {
       cs: [
@@ -186,7 +186,7 @@ const ANIMALS = [
   },
   {
     id: 'guinea', nameCS: 'Morče', nameEN: 'Guinea Pig', emoji: '🐾',
-    accusativeCS: 'morče', accusativeEN: 'the guinea pig',
+    accusativeCS: 'morče', accusativeEN: 'the guinea pig', instrumentalCS: 'morčetem',
     placeholderColor: '#27AE60',
     actions: {
       cs: [
@@ -209,7 +209,7 @@ const ANIMALS = [
       en: ['I want veggies! 🥦', 'Pet me! 🤝', 'Pen stinks! 🧹', 'I wanna play! 🎾', 'I\'m thirsty! 💧']
     },
     refusals: {
-      cs: { feed: 'Jsem plné! 🥦', pet: 'Nech mě být! 😤', play: 'Jsem unavené! 😴', sleep: 'Nechci spát! 🎾', clean: 'Ještě čisto! ✨' },
+      cs: { feed: 'Jsem plný/á! 🥦', pet: 'Nech mě být! 😤', play: 'Jsem unavený/á! 😴', sleep: 'Nechci spát! 🎾', clean: 'Ještě čisto! ✨' },
       en: { feed: 'I\'m full! 🥦', pet: 'Leave me alone! 😤', play: 'I\'m tired! 😴', sleep: 'Don\'t wanna sleep! 🎾', clean: 'Still clean! ✨' }
     },
     facts: [
@@ -231,7 +231,7 @@ const ANIMALS = [
   },
   {
     id: 'snake', nameCS: 'Had', nameEN: 'Snake', emoji: '🐍',
-    accusativeCS: 'hada', accusativeEN: 'the snake',
+    accusativeCS: 'hada', accusativeEN: 'the snake', instrumentalCS: 'hadem',
     placeholderColor: '#2ECC71',
     actions: {
       cs: [
@@ -276,7 +276,7 @@ const ANIMALS = [
   },
   {
     id: 'parrot', nameCS: 'Papoušek', nameEN: 'Parrot', emoji: '🦜',
-    accusativeCS: 'papouška', accusativeEN: 'the parrot',
+    accusativeCS: 'papouška', accusativeEN: 'the parrot', instrumentalCS: 'papouškem',
     placeholderColor: '#E74C3C',
     actions: {
       cs: [
@@ -321,7 +321,7 @@ const ANIMALS = [
   },
   {
     id: 'turtle', nameCS: 'Želva', nameEN: 'Turtle', emoji: '🐢',
-    accusativeCS: 'želvu', accusativeEN: 'the turtle',
+    accusativeCS: 'želvu', accusativeEN: 'the turtle', instrumentalCS: 'želvou',
     placeholderColor: '#16A085',
     actions: {
       cs: [
@@ -366,7 +366,7 @@ const ANIMALS = [
   },
   {
     id: 'fish', nameCS: 'Rybička', nameEN: 'Fish', emoji: '🐠',
-    accusativeCS: 'rybičku', accusativeEN: 'the fish',
+    accusativeCS: 'rybičku', accusativeEN: 'the fish', instrumentalCS: 'rybičkou',
     placeholderColor: '#3498DB',
     actions: {
       cs: [
@@ -411,7 +411,7 @@ const ANIMALS = [
   },
   {
     id: 'hedgehog', nameCS: 'Ježek', nameEN: 'Hedgehog', emoji: '🦔',
-    accusativeCS: 'ježka', accusativeEN: 'the hedgehog',
+    accusativeCS: 'ježka', accusativeEN: 'the hedgehog', instrumentalCS: 'ježkem',
     placeholderColor: '#795548',
     actions: {
       cs: [
@@ -456,7 +456,7 @@ const ANIMALS = [
   },
   {
     id: 'leopard', nameCS: 'Leopard', nameEN: 'Leopard', emoji: '🐆',
-    accusativeCS: 'leoparda', accusativeEN: 'the leopard',
+    accusativeCS: 'leoparda', accusativeEN: 'the leopard', instrumentalCS: 'leopardem',
     placeholderColor: '#F1C40F', isFinal: true,
     actions: {
       cs: [

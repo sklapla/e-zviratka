@@ -15,6 +15,7 @@ const Storage = (function() {
       unlocked:          unlocked,
       happiness:         happiness,
       petName:           null,
+      petGender:         null,
       lastCareTimestamp: null,
       charges:           { feed: 2, pet: 3, play: 2, sleep: 2, clean: 2 },
       cooldownUntil:     { feed: null, pet: null, play: null, sleep: null, clean: null }

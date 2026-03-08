@@ -514,26 +514,41 @@ const App = (function() {
         break;
 
       case 'NAME_ANIMAL': {
-        var nameInput  = document.getElementById('pet-name-input');
-        var nameBtn    = document.getElementById('btn-confirm-name');
+        var nameInput      = document.getElementById('pet-name-input');
+        var nameBtn        = document.getElementById('btn-confirm-name');
+        var selectedGender = null;
+
+        function _updateConfirmBtn() {
+          var ok = !!(nameInput && nameInput.value.trim().length > 0 && selectedGender);
+          if (nameBtn) { nameBtn.disabled = !ok; nameBtn.style.opacity = ok ? '1' : '0.5'; }
+        }
+
         if (nameInput) {
           nameInput.focus();
-          nameInput.addEventListener('input', function() {
-            var has = nameInput.value.trim().length > 0;
-            nameBtn.disabled    = !has;
-            nameBtn.style.opacity = has ? '1' : '0.5';
-          });
+          nameInput.addEventListener('input', _updateConfirmBtn);
           nameInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') nameBtn.click();
+            if (e.key === 'Enter' && !nameBtn.disabled) nameBtn.click();
           });
         }
+
+        document.querySelectorAll('.pet-gender-btn').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            selectedGender = btn.dataset.gender;
+            document.querySelectorAll('.pet-gender-btn').forEach(function(b) {
+              b.classList.toggle('active-acc', b === btn);
+            });
+            _updateConfirmBtn();
+          });
+        });
+
         if (nameBtn) {
           nameBtn.addEventListener('click', function() {
             var petName = nameInput ? nameInput.value.trim() : '';
-            if (!petName) return;
+            if (!petName || !selectedGender) return;
             var s = Storage.load();
             if (s.animals[params.animalId]) {
-              s.animals[params.animalId].petName = petName;
+              s.animals[params.animalId].petName   = petName;
+              s.animals[params.animalId].petGender = selectedGender;
               Storage.save(s);
               trackEvent('animal_named', {
                 animalId:   params.animalId,
@@ -713,6 +728,8 @@ const App = (function() {
         navigate('COLLECTION');
       });
 
+    var _petGender = (Storage.load().animals[animalId] || {}).petGender || null;
+
     Game.initCareScreen(animalId, {
       onHappinessChange: function(happiness, mood, moodEmoji) {
         const bar  = document.getElementById('happiness-bar');
@@ -731,7 +748,7 @@ const App = (function() {
         _showBubble(I18n.t('bubble_reward_wait'), 3000);
       },
       onComplaint: function(msg) {
-        _showBubble(msg, 4000);
+        _showBubble(_genderize(msg, _petGender), 4000);
       },
       onRewardFired: function(newAnimalId) {
         var st = Storage.load();
@@ -758,7 +775,7 @@ const App = (function() {
 
         // Refusal — show animal-specific rejection bubble
         if (result.refusal) {
-          _showBubble(getAnimalRefusal(animalId, action), 2000);
+          _showBubble(_genderize(getAnimalRefusal(animalId, action), _petGender), 2000);
           _refreshChargeButtons(animalId);
           return;
         }
@@ -870,6 +887,25 @@ const App = (function() {
 
   // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+  // Resolve Czech adjective gender: "unavený/á" → "unavený" (male) / "unavená" (female)
+  function _genderize(text, gender) {
+    return text.replace(/([^\s/]*)ý\/á/g, function(_, stem) {
+      return gender === 'female' ? stem + 'á' : stem + 'ý';
+    });
+  }
+
+  // Czech instrumental of a pet name (7th case), e.g. MICKA→MICKOU, FRACEK→FRACEKEM
+  function _petInstrumental(name, gender) {
+    var n    = name.toUpperCase();
+    var last = n.slice(-1);
+    var VOWELS = 'AÁEÉĚIÍOÓUÚŮYÝ';
+    if (last === 'A') return n.slice(0, -1) + 'OU';            // MICKA→MICKOU
+    if (VOWELS.indexOf(last) === -1) {                          // ends in consonant
+      return gender === 'female' ? n + 'OU' : n + 'EM';        // FRACEK→FRACEKEM
+    }
+    return n; // ends in other vowel — unchanged (FIFI→FIFI)
+  }
+
   // Pick 2 random items from arr, avoiding last shown indices (sessionStorage)
   function _pickRandom2(arr, sessionKey) {
     if (!arr || arr.length === 0) return [];
@@ -897,6 +933,9 @@ const App = (function() {
       : 'Jak se bude jmenovat tvůj/tvoje ' + species + '?';
     var placeholder = lang === 'en' ? 'Enter a name...' : 'Napiš jméno...';
     var btnLabel    = lang === 'en' ? 'Confirm \u2192' : 'Potvrdit \u2192';
+    var genderQ     = lang === 'en' ? 'Choose gender:' : 'Vyber pohlaví:';
+    var lblMale     = lang === 'en' ? '🐾 Boy' : '🐾 Kluk';
+    var lblFemale   = lang === 'en' ? '🐾 Girl' : '🐾 Holka';
 
     return '' +
       '<div class="name-animal-screen">' +
@@ -904,6 +943,13 @@ const App = (function() {
         '<h2 style="font-size:14px;text-align:center;line-height:1.7;margin:0 0 20px">' + question + '</h2>' +
         '<input type="text" id="pet-name-input" maxlength="12" autocomplete="off" ' +
                'placeholder="' + placeholder + '" class="pet-name-input">' +
+        '<p style="font-size:12px;color:var(--color-text-dim);margin:4px 0 8px">' + genderQ + '</p>' +
+        '<div style="display:flex;gap:12px;justify-content:center">' +
+          '<button class="btn-secondary pet-gender-btn" data-gender="male" ' +
+                  'style="min-width:100px">' + lblMale + '</button>' +
+          '<button class="btn-secondary pet-gender-btn" data-gender="female" ' +
+                  'style="min-width:100px">' + lblFemale + '</button>' +
+        '</div>' +
         '<button class="btn-primary" id="btn-confirm-name" disabled ' +
                 'style="opacity:0.5;max-width:240px;width:100%">' + btnLabel + '</button>' +
       '</div>';
@@ -920,14 +966,18 @@ const App = (function() {
     var lang        = I18n.getCurrentLang();
     var species     = I18n.t('animal_' + animalId);
     var petName     = animalSt.petName;
+    var petGender   = animalSt.petGender || null;
     var displayName = petName ? (petName + ' \u2022 ' + species) : species;
-    // "Jít za X" — with name: use name; without: use accusative form
-    var goName      = petName
-      ? petName.toUpperCase()
-      : (lang === 'en'
-          ? animal.accusativeEN.toUpperCase()
-          : ('ZA ' + animal.accusativeCS).toUpperCase().replace('ZA ZA ','ZA '));
-    var goLabel     = lang === 'en' ? 'GO TO ' + goName + ' \u2192' : 'J\u00cdT ' + goName + ' \u2192';
+    // "Jít za X" — instrumental (7th case)
+    var goName;
+    if (lang === 'en') {
+      goName = petName ? petName.toUpperCase() : animal.accusativeEN.toUpperCase();
+    } else if (petName) {
+      goName = _petInstrumental(petName, petGender);
+    } else {
+      goName = (animal.instrumentalCS || animal.accusativeCS).toUpperCase();
+    }
+    var goLabel = lang === 'en' ? 'GO TO ' + goName + ' \u2192' : 'J\u00cdT ZA ' + goName + ' \u2192';
     var closeLabel  = lang === 'en' ? 'Close' : 'Zav\u0159\u00edt';
     var factsTitle  = lang === 'en' ? '📚 Did you know...' : '📚 V\u011bd\u011bl/a jsi, \u017ee...';
     var funTitle    = lang === 'en' ? '😄 Fun fact!' : '😄 Z\u00e1bavn\u00e9!';
@@ -1002,7 +1052,10 @@ const App = (function() {
         animalSt.petName = newName;
         // Update go-to button label
         var goBtn = document.getElementById('btn-go-to-care-detail');
-        if (goBtn) goBtn.textContent = (lang === 'en' ? 'Go to ' + newName + ' \u2192' : 'J\u00edt za ' + newName + ' \u2192');
+        if (goBtn) {
+          var newInstr = lang === 'en' ? newName.toUpperCase() : _petInstrumental(newName, petGender);
+          goBtn.textContent = (lang === 'en' ? 'GO TO ' + newInstr + ' \u2192' : 'J\u00cdT ZA ' + newInstr + ' \u2192');
+        }
         var newDisplay = newName + ' \u2022 ' + species;
         row.innerHTML = '<span id="detail-name-text" style="font-family:var(--font-heading);font-size:13px">' + newDisplay + '</span>' +
           '<button class="edit-name-btn" id="btn-edit-petname" title="' + renameLabel + '" aria-label="' + renameLabel + '">✏️</button>';
