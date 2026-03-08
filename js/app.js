@@ -6,6 +6,15 @@
 const App = (function() {
   let _currentScreen = null;
   let _currentParams = {};
+  var _sessionStart      = Date.now();
+  var _totalActionCount  = 0;
+
+  function _getUnlockedCount() {
+    var state = Storage.load();
+    return Object.keys(state.animals).filter(function(id) {
+      return state.animals[id] && state.animals[id].unlocked;
+    }).length;
+  }
 
   // ─── Navigation ─────────────────────────────────────────────────────────────
 
@@ -51,12 +60,20 @@ const App = (function() {
   // ─── SPLASH ──────────────────────────────────────────────────────────────────
 
   function _renderSplash() {
+    var hasConsent = localStorage.getItem('ezvíratka_analytics_consent') === 'true';
+    var noticeHTML = hasConsent ? '' :
+      '<p class="analytics-notice">' +
+        'Hra si ukládá, jak se staráš o zvířátka — abychom ji mohli zlepšovat. ' +
+        'Žádné osobní údaje nesdílíme.' +
+      '</p>';
+    var btnLabel = hasConsent ? I18n.t('btn_start') : 'Rozumím, jdeme na to! 🐾';
     return '' +
       '<div class="splash-screen">' +
         '<div class="game-title">e-zv&#237;&#345;&#225;tka</div>' +
         '<div style="font-size:48px">&#x1F43E;</div>' +
         '<p class="subtitle">' + I18n.t('subtitle') + '</p>' +
-        '<button class="btn-primary" id="btn-start">' + I18n.t('btn_start') + '</button>' +
+        noticeHTML +
+        '<button class="btn-primary" id="btn-start">' + btnLabel + '</button>' +
       '</div>';
   }
 
@@ -458,7 +475,15 @@ const App = (function() {
         Analytics.trackAppOpen();
         document.getElementById('btn-start') &&
           document.getElementById('btn-start').addEventListener('click', function() {
-            const state = Storage.load();
+            // Ulož souhlas s analytikou (první kliknutí = souhlas)
+            localStorage.setItem('ezvíratka_analytics_consent', 'true');
+            var state = Storage.load();
+            trackEvent('session_start', {
+              avatarName:    state.avatar ? state.avatar.name : '',
+              gender:        state.avatar ? state.avatar.gender : '',
+              unlockedCount: _getUnlockedCount(),
+              isReturn:      !!(state.avatar && state.avatar.name)
+            });
             if (state.avatar.name) {
               navigate('COLLECTION');
             } else {
@@ -510,7 +535,11 @@ const App = (function() {
             if (s.animals[params.animalId]) {
               s.animals[params.animalId].petName = petName;
               Storage.save(s);
-              Analytics.track('pet_named', { animal_id: params.animalId, pet_name: petName });
+              trackEvent('animal_named', {
+                animalId:   params.animalId,
+                petName:    petName,
+                avatarName: s.avatar ? s.avatar.name : ''
+              });
             }
             navigate('CARE', { animalId: params.animalId });
           });
@@ -705,6 +734,12 @@ const App = (function() {
         _showBubble(msg, 4000);
       },
       onRewardFired: function(newAnimalId) {
+        var st = Storage.load();
+        trackEvent('animal_unlocked', {
+          animalId:      newAnimalId,
+          unlockedCount: _getUnlockedCount(),
+          avatarName:    st.avatar ? st.avatar.name : ''
+        });
         navigate('UNLOCK_NOTIFY', { currentAnimalId: animalId, newAnimalId: newAnimalId });
       },
       onLeopardUnlocked: function() {
@@ -728,7 +763,13 @@ const App = (function() {
           return;
         }
 
-        Analytics.track('action_performed', { animal_id: animalId, action: action });
+        _totalActionCount++;
+        trackEvent('care_action', {
+          animalId:    animalId,
+          actionType:  action,
+          happiness:   result.happiness,
+          actionCount: _totalActionCount
+        });
 
         // Update happiness UI
         var bar  = document.getElementById('happiness-bar');
@@ -1069,6 +1110,16 @@ const App = (function() {
   function init() {
     I18n.init();
     navigate('SPLASH');
+
+    window.addEventListener('beforeunload', function() {
+      var duration = Math.floor((Date.now() - _sessionStart) / 1000);
+      var st = Storage.load();
+      trackEvent('session_end', {
+        sessionDuration: duration,
+        unlockedCount:   _getUnlockedCount(),
+        avatarName:      st.avatar ? (st.avatar.name || '') : ''
+      });
+    });
 
     var resetBtn     = document.getElementById('btn-dev-reset');
     var resetConfirm = document.getElementById('reset-confirm');

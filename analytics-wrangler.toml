@@ -1,0 +1,7 @@
+name = "e-zviratka-analytics"
+main = "analytics-worker.js"
+compatibility_date = "2025-09-27"
+
+[[analytics_engine_datasets]]
+binding = "ANALYTICS"
+dataset = "ezvíratka_events"

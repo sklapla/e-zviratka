@@ -451,6 +451,17 @@ input[type="text"]:focus {
   border-radius: 4px;
 }
 
+/* ── Analytics consent notice ──────────────────────────── */
+.analytics-notice {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--color-text-dim);
+  text-align: center;
+  max-width: 280px;
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* ── Splash Screen ──────────────────────────────────────── */
 .splash-screen {
   text-align: center;
