@@ -30,6 +30,18 @@
   <script src="js/game.js" defer></script>
   <script src="js/app.js" defer></script>
   <!-- Google Analytics — nahraď G-XXXXXXXXXX svým Measurement ID z analytics.google.com -->
+  <!-- Prevent double-tap zoom on iOS 16+ (ignores user-scalable=no) -->
+  <script>
+    (function() {
+      var lastTap = 0;
+      document.addEventListener('touchend', function(e) {
+        var now = Date.now();
+        if (now - lastTap < 300) e.preventDefault();
+        lastTap = now;
+      }, { passive: false });
+    })();
+  </script>
+  <!-- Google Analytics — nahraď G-XXXXXXXXXX svým Measurement ID z analytics.google.com -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
