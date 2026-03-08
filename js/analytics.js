@@ -13,7 +13,7 @@ function getSessionId() {
   return sid;
 }
 
-var ANALYTICS_URL = 'https://analytics.e-zviratka.workers.dev';
+var ANALYTICS_URL = 'https://e-zviratka-analytics.sklapla.workers.dev';
 
 function trackEvent(event, payload) {
   // Sleduj pouze pokud dal souhlas
