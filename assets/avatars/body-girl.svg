@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <!-- Girl body: pink dress + head -->
+  <circle cx="48" cy="28" r="18" fill="#FDBCB4"/>
+  <!-- Dress -->
+  <path d="M24 48 Q48 44 72 48 L78 84 H18 Z" fill="#FF6B9D"/>
+  <!-- Arms -->
+  <rect x="10" y="50" width="14" height="26" rx="6" fill="#FF6B9D"/>
+  <rect x="72" y="50" width="14" height="26" rx="6" fill="#FF6B9D"/>
+  <!-- Hands -->
+  <circle cx="17" cy="77" r="7" fill="#FDBCB4"/>
+  <circle cx="79" cy="77" r="7" fill="#FDBCB4"/>
+  <!-- Legs/shoes -->
+  <rect x="30" y="82" width="14" height="12" rx="4" fill="#FDBCB4"/>
+  <rect x="52" y="82" width="14" height="12" rx="4" fill="#FDBCB4"/>
+</svg>

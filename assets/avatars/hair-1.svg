@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <!-- Medium: cap + short sides outside face area (x<28 and x>68) -->
+  <ellipse cx="48" cy="14" rx="19" ry="8" fill="#CC3333"/>
+  <rect x="29" y="14" width="38" height="8" fill="#CC3333"/>
+  <rect x="10" y="14" width="19" height="18" rx="5" fill="#CC3333"/>
+  <rect x="67" y="14" width="19" height="18" rx="5" fill="#CC3333"/>
+</svg>

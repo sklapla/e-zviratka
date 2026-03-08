@@ -1,0 +1,763 @@
+/* ═══════════════════════════════════════════════════════════
+   ZvířecíSvět / PetWorld — main.css
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Custom Properties ──────────────────────────────────── */
+:root {
+  --color-primary:   #FF6B6B;
+  --color-secondary: #4ECDC4;
+  --color-accent:    #FFE66D;
+  --color-bg:        #1a1a2e;
+  --color-surface:   #16213e;
+  --color-surface2:  #0f3460;
+  --color-text:      #e0e0e0;
+  --color-text-dim:  #a0a0b0;
+  --color-border:    #4ECDC4;
+  --color-locked:    #555577;
+
+  --radius-btn:   4px;
+  --size-touch:   48px;
+  --font-heading: 'Press Start 2P', monospace;
+  --font-body:    'Nunito', sans-serif;
+  --shadow-pixel: 4px 4px 0px rgba(0,0,0,0.5);
+}
+
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Body ───────────────────────────────────────────────── */
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+/* ── App Container ──────────────────────────────────────── */
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+/* ── Screen ─────────────────────────────────────────────── */
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+/* ── Language Switcher ──────────────────────────────────── */
+#lang-switcher {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 100;
+  display: flex;
+  gap: 8px;
+}
+
+.lang-btn {
+  min-width: var(--size-touch);
+  min-height: var(--size-touch);
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  background: var(--color-surface2);
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+  padding: 8px 12px;
+  border-radius: var(--radius-btn);
+}
+
+.lang-btn.active {
+  background: var(--color-secondary);
+  color: #1a1a2e;
+}
+
+/* ── Headings ───────────────────────────────────────────── */
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: clamp(14px, 4vw, 20px);
+}
+
+h2 {
+  font-size: clamp(11px, 3vw, 16px);
+}
+
+/* ── Pixel Border ───────────────────────────────────────── */
+.pixel-border {
+  box-shadow:
+    0 -4px 0 0 var(--color-border),
+    0  4px 0 0 var(--color-border),
+    -4px 0 0 0 var(--color-border),
+     4px 0 0 0 var(--color-border);
+}
+
+/* ── Primary Button ─────────────────────────────────────── */
+.btn-primary {
+  display: block;
+  width: 100%;
+  min-height: var(--size-touch);
+  background: var(--color-primary);
+  color: #1a1a2e;
+  border: none;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: var(--radius-btn);
+  box-shadow: var(--shadow-pixel);
+  text-transform: uppercase;
+  transition: transform 0.1s;
+}
+
+.btn-primary:active {
+  transform: translateY(2px);
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+}
+
+/* ── Secondary Button ───────────────────────────────────── */
+.btn-secondary {
+  display: block;
+  width: 100%;
+  min-height: var(--size-touch);
+  background: var(--color-surface2);
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+  font-family: var(--font-heading);
+  font-size: 10px;
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: var(--radius-btn);
+  box-shadow: var(--shadow-pixel);
+  text-transform: uppercase;
+  transition: transform 0.1s;
+}
+
+.btn-secondary:active {
+  transform: translateY(2px);
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+}
+
+/* ── Disabled Buttons ───────────────────────────────────── */
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Active Accent State (avatar customizer) ────────────── */
+.active-acc {
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+}
+
+/* ── Animals Grid ───────────────────────────────────────── */
+.animals-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* ── Animal Card ────────────────────────────────────────── */
+.animal-card {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.1s;
+  min-height: var(--size-touch);
+  position: relative;
+}
+
+.animal-card:hover:not(.locked) {
+  transform: scale(1.02);
+}
+
+.animal-card.locked {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.animal-card .lock-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 18px;
+}
+
+.animal-card img {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+}
+
+.animal-card .animal-name {
+  font-family: var(--font-heading);
+  font-size: 8px;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ── Happiness Bar ──────────────────────────────────────── */
+.happiness-bar-container {
+  background: var(--color-surface2);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  height: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.happiness-bar {
+  height: 100%;
+  background: var(--color-secondary);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.happiness-bar.sad      { background: #ff4444; }
+.happiness-bar.neutral  { background: #ffaa00; }
+.happiness-bar.happy    { background: var(--color-secondary); }
+.happiness-bar.ecstatic { background: var(--color-accent); }
+
+/* ── Action Buttons ─────────────────────────────────────── */
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.btn-action {
+  min-height: var(--size-touch);
+  background: var(--color-surface2);
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: var(--radius-btn);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.1s;
+}
+
+.btn-action:active:not(:disabled) {
+  transform: translateY(2px);
+}
+
+.btn-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Avatar Container ───────────────────────────────────── */
+.avatar-container {
+  position: relative;
+  width: 96px;
+  height: 96px;
+}
+
+.avatar-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-screen {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 64px);
+}
+.avatar-panel {
+  flex: 0 0 auto;
+  min-height: 160px;
+  max-height: 42vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  background: var(--color-bg);
+  border-bottom: 2px solid var(--color-surface2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  position: relative;
+  z-index: 2;
+}
+.avatar-options {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Color Swatches ─────────────────────────────────────── */
+.color-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: border-color 0.1s;
+}
+
+.color-swatch.selected {
+  border-color: white;
+}
+
+.swatches-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ── Text Input ─────────────────────────────────────────── */
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  background: var(--color-surface2);
+  border: 2px solid var(--color-border);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  border-radius: var(--radius-btn);
+  outline: none;
+}
+
+input[type="text"]:focus {
+  border-color: var(--color-accent);
+}
+
+/* ── Error Message ──────────────────────────────────────── */
+.error-msg {
+  color: var(--color-primary);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* ── Notification Bubble ────────────────────────────────── */
+.notification-bubble {
+  position: absolute;
+  background: var(--color-surface);
+  border: 2px solid var(--color-accent);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.notification-bubble.visible {
+  opacity: 1;
+}
+
+/* ── Care Screen ────────────────────────────────────────── */
+.care-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.animal-display {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.animal-sprite-img {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+/* ── Mood Emoji ─────────────────────────────────────────── */
+.mood-emoji {
+  font-size: 24px;
+}
+
+/* ── Collection Card ────────────────────────────────────── */
+.collection-card {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.1s;
+  min-height: var(--size-touch);
+  position: relative;
+}
+
+.collection-card:hover {
+  transform: scale(1.02);
+}
+
+/* ── Card Mini Happiness Bar ────────────────────────────── */
+.card-happiness-bar {
+  height: 8px;
+  background: var(--color-surface2);
+  border-radius: 4px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.card-happiness-fill {
+  height: 100%;
+  background: var(--color-secondary);
+  border-radius: 4px;
+}
+
+/* ── Splash Screen ──────────────────────────────────────── */
+.splash-screen {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding-top: 40px;
+}
+
+.game-title {
+  font-family: var(--font-heading);
+  font-size: clamp(16px, 5vw, 28px);
+  color: var(--color-accent);
+  text-shadow: 4px 4px 0px rgba(0,0,0,0.5);
+  line-height: 1.8;
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text-dim);
+}
+
+/* ── Label ──────────────────────────────────────────────── */
+.label {
+  font-family: var(--font-heading);
+  font-size: 9px;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* ── Section ────────────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* ── Leopard Cutscene ───────────────────────────────────── */
+#leopard-cutscene {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #0a0a1a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  text-align: center;
+  padding: 24px;
+}
+
+.cutscene-title {
+  font-family: var(--font-heading);
+  font-size: clamp(12px, 3vw, 18px);
+  color: var(--color-accent);
+  line-height: 1.8;
+}
+
+/* ── Dev reset button ───────────────────────────────────── */
+#btn-dev-reset {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  z-index: 200;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(80, 80, 100, 0.5);
+  color: var(--color-text-dim);
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+  line-height: 1;
+}
+#btn-dev-reset:hover {
+  opacity: 1;
+}
+#reset-confirm {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#reset-confirm-box {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 280px;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: var(--shadow-pixel);
+}
+#reset-confirm-box button {
+  min-height: var(--size-touch);
+  padding: 8px 20px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-btn);
+  background: var(--color-surface2);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+#btn-reset-yes {
+  border-color: #ff6b6b !important;
+  color: #ff6b6b !important;
+}
+#btn-reset-no {
+  border-color: var(--color-secondary) !important;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .animals-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  #app {
+    padding: 24px;
+  }
+  .game-title {
+    font-size: 28px;
+  }
+}
+
+/* ── Charge Dots ────────────────────────────────────────── */
+.charge-dots {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 2px;
+  margin-top: 4px;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.btn-action-cooldown {
+  opacity: 0.45;
+  filter: grayscale(0.5);
+}
+
+.btn-action-cooldown .charge-dots {
+  color: var(--color-text-muted, #888);
+}
+
+/* ── Unlock Notify Screen ───────────────────────────────── */
+.unlock-notify {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+  min-height: 60vh;
+  padding: 32px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.unlock-notify h2 {
+  font-size: 26px;
+  color: var(--color-accent);
+  margin: 0;
+}
+
+.unlock-notify .unlock-animal-emoji {
+  font-size: 80px;
+  line-height: 1;
+  animation: bounce 0.6s ease infinite alternate;
+}
+
+.unlock-notify p {
+  font-size: 16px;
+  color: var(--color-text-muted);
+  max-width: 280px;
+  margin: 0;
+}
+
+.unlock-star {
+  position: fixed;
+  top: -40px;
+  font-size: 24px;
+  pointer-events: none;
+  animation: confetti-fall linear forwards;
+  z-index: 999;
+}
+
+/* ── Name Animal Screen ─────────────────────────────────── */
+.name-animal-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 16px;
+  min-height: 60vh;
+  gap: 16px;
+}
+
+.pet-name-input {
+  font-size: 18px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  width: 100%;
+  max-width: 280px;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: var(--font-body);
+}
+
+.pet-name-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+/* ── Animal Detail Modal ─────────────────────────────────── */
+.animal-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.animal-detail-modal {
+  background: var(--color-surface);
+  border-radius: 16px;
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  max-height: 86vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+}
+
+.detail-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.edit-name-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 4px;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.1s;
+}
+
+.edit-name-btn:hover { opacity: 1; }
+
+.fact-section-title {
+  font-family: var(--font-heading);
+  font-size: 9px;
+  margin-bottom: 8px;
+}
+
+.fact-section-title.accent   { color: var(--color-accent); }
+.fact-section-title.secondary { color: var(--color-secondary); }
+
+.fact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fact-item {
+  font-size: 13px;
+  line-height: 1.55;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  border-left: 3px solid var(--color-accent);
+}
+
+.fact-item.fun {
+  border-left-color: var(--color-secondary);
+}
+
+/* ── Reduced Motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
