@@ -34,7 +34,15 @@ const ANIMALS = [
     },
     facts: [
       'Psi žijí s lidmi už více než 15 000 let — jsou naši nejstarší přátelé mezi zvířaty.',
-      'Psi mají čich až 100 000× silnější než my — poznají tě podle vůně z velké dálky.'
+      'Psi mají čich až 100 000× silnější než my — poznají tě podle vůně z velké dálky.',
+      'Psi mají tři oční víčka — třetí je schované v rohu oka.',
+      'Čumák každého psa má unikátní vzor — jako otisk prstu u lidí.',
+      'Psi sní — vědci to potvrdili sledováním mozkových vln během spánku.',
+      'Psi vidí barvy, ale ne tak živě jako my — hlavně modrou a žlutou.',
+      'Nejrychlejší pes na světě je chrt — běží až 72 km/h!',
+      'Psi mají asi 1 700 chuťových pohárků — my máme 9 000, takže psi nevnímají chutě tak silně jako my a sní skoro cokoliv!',
+      'Štěkání je způsob komunikace vyvinutý speciálně pro život s lidmi — divocí psi téměř neštěkají.',
+      'Průměrný pes rozumí asi 165 slovům — nejchytřejší až 250!'
     ],
     funFacts: [
       'Když pes točí ocasem doprava, je šťastný. Když doleva, je trochu nervózní!',
@@ -71,7 +79,15 @@ const ANIMALS = [
     },
     facts: [
       'Kočky spí 12–16 hodin denně — to je skoro celý den!',
-      'Kočky mají v uších 32 svalů, takže mohou otáčet ušima jako radarem.'
+      'Kočky mají v uších 32 svalů, takže mohou otáčet ušima jako radarem.',
+      'Kočky mají 230 kostí — o 24 více než člověk.',
+      'Kočka nikdy nesdílí pozdrav čumákem s kočkou, které nedůvěřuje.',
+      'Kočky nemohou cítit sladkou chuť — nemají pro ni chuťové pohárky.',
+      'Pomalé mrknutí kočky je "kočičí polibek" — znamená důvěru a lásku.',
+      'Kočky chodí na špičkách — jsou to digitigradní živočichové.',
+      'Kočka dokáže skočit do výšky 6× délky svého těla.',
+      'Chůze kočky je jako chůze velblouda — nejdřív pohybuje oběma pravými nohama, pak oběma levými.',
+      'Kočky tráví 30–50 % bdělého času čištěním srsti.'
     ],
     funFacts: [
       'Kočky přede, když jsou spokojené — ale taky když jsou nemocné nebo vystrašené. Předení je uklidňuje!',
@@ -108,7 +124,15 @@ const ANIMALS = [
     },
     facts: [
       'Králíci mají oči po stranách hlavy a vidí skoro 360° kolem sebe — téměř za sebe!',
-      'Zuby králíka nikdy nepřestanou růst — proto potřebují stále něco hlodát.'
+      'Zuby králíka nikdy nepřestanou růst — proto potřebují stále něco hlodát.',
+      'Králíci nemohou zvracet — proto je důležité je krmit správně.',
+      'Králík může zemřít strachy — jejich srdce je velmi citlivé na stres.',
+      'Králíci mají 28 zubů a ty stále rostou celý život.',
+      'Králík dokáže vidět téměř za sebe, ale má mrtvý úhel přímo před nosem.',
+      'Divoký králík uběhne až 56 km/h — rychlejší než většina psů!',
+      'Králíci jsou velmi chytří a lze je naučit přijít na zavolání.',
+      'Králík dává najevo štěstí tím, že poskakuje a otáčí se ve vzduchu — říká se tomu "binky".',
+      'Králíci jsou soumrační — nejvíce aktivní jsou ráno a večer.'
     ],
     funFacts: [
       'Když je králík velmi šťastný, dělá velký skok do vzduchu a otočí se — tomu se říká "binky"!',
@@ -145,7 +169,15 @@ const ANIMALS = [
     },
     facts: [
       'Křeček si do tváří dokáže nacpat jídlo, které váží skoro tolik co on sám!',
-      'Křečci jsou noční zvířata — nejvíce aktivní jsou večer a v noci.'
+      'Křečci jsou noční zvířata — nejvíce aktivní jsou večer a v noci.',
+      'Křeček v přírodě žije sám — je to samotář, který si brání své území.',
+      'Křečci se orientují pomocí pachových žláz — zanechávají stopy.',
+      'Tváře křečka se nazývají lícní váčky a sahají až k ramenům.',
+      'Křeček vidí špatně — je krátkozraký a vnímá hlavně pohyb.',
+      'V přírodě si křeček hloubí nory až 1 metr hluboké.',
+      'Křeček může mít zásoby až 30 kg jídla schované v noře!',
+      'Křečci se v přírodě dožívají jen 1–2 let, doma až 3–4 roky.',
+      'Křeček dokáže zpomalit tep a dýchání při hibernaci na minimum.'
     ],
     funFacts: [
       'Křeček uběhne na kolečku až 8 km za noc — to je jako běžet z jednoho města do druhého!',
@@ -182,7 +214,15 @@ const ANIMALS = [
     },
     facts: [
       'Morčata jsou velmi společenská — v přírodě žijí ve velkých skupinách a osamělá jsou nešťastná.',
-      'Morčata vydávají přes 11 různých zvuků — každý znamená něco jiného!'
+      'Morčata vydávají přes 11 různých zvuků — každý znamená něco jiného!',
+      'Morčata nikdy nežijí v přírodě divoce — jsou to domestikovaná zvířata po tisíce let.',
+      'Indiáni v Jižní Americe chovali morčata jako jídlo i jako mazlíčky.',
+      'Morče se může učit jednoduché triky jako pes — třeba skočit přes překážku.',
+      'Morčata mají velmi citlivý sluch a slyší zvuky, které my neslyšíme.',
+      'Morče pije hodně vody — až 100 ml denně, což je hodně na tak malé zvíře.',
+      'Morčata si vzájemně čistí srst — to je znak důvěry a přátelství.',
+      'Morče může žít 4–8 let — to je pro tak malé zvíře velmi dlouho.',
+      'Morčata nikdy nespí tvrdě — vždy jsou trochu ve střehu.'
     ],
     funFacts: [
       'Když je morče nadšené, poskakuje a třese se — tomu se říká "popcorning"!',
@@ -219,7 +259,15 @@ const ANIMALS = [
     },
     facts: [
       'Hadi nemají uši — vnímají vibrace země svým tělem a jazykem čichají vzduch.',
-      'Had svléká kůži několikrát ročně — pod starou kůží mu roste nová, hezčí.'
+      'Had svléká kůži několikrát ročně — pod starou kůží mu roste nová, hezčí.',
+      'Had nemá víčka — spí s otevřenýma očima.',
+      'Hadi jsou chladnokrevní — jejich teplota závisí na okolí.',
+      'Některé hady mají zbytky zadních nožiček schované pod kůží — evoluce!',
+      'Had cítí teplo kořisti speciálními jamkami na hlavě — vidí "tepelný obraz".',
+      'Hadí jazyk je rozštěpený proto, aby had zjistil, odkud přichází vůně.',
+      'Největší had světa — anakonda — může vážit přes 200 kg.',
+      'Hadi nepotřebují jíst každý den — velký had si vystačí s jedním jídlem za měsíc.',
+      'Hadí šupiny jsou ze stejného materiálu jako naše nehty — keratin.'
     ],
     funFacts: [
       'Hadi umí spolknout kořist mnohem větší než jejich hlava — čelist se jim rozloží jako guma!',
@@ -256,7 +304,15 @@ const ANIMALS = [
     },
     facts: [
       'Papoušci jsou jedni z nejchytřejších ptáků na světě — někteří rozumí stovkám slov.',
-      'Papoušci žijí velmi dlouho — velcí papoušci se mohou dožít až 80 let!'
+      'Papoušci žijí velmi dlouho — velcí papoušci se mohou dožít až 80 let!',
+      'Papoušci jsou jedni z mála živočichů, kteří se poznají v zrcadle.',
+      'Papoušek ara může překousnout i tvrdý ořech svým zobákem.',
+      'Papoušci tancují do rytmu hudby — jako my!',
+      'Některé druhy papoušků létají v hejnech až 1 000 ptáků.',
+      'Papoušek kea z Nového Zélandu je nejchytřejší pták světa.',
+      'Papoušci mají jazyk podobný lidskému — proto dokážou napodobovat řeč.',
+      'Žako šedý dokáže nejen opakovat, ale i chápat význam slov.',
+      'Papoušci spí stojí na větvi — dokážou se zaaretovat, aby nespadli.'
     ],
     funFacts: [
       'Papoušci nenapodobují jen slova — dokážou napodobit zvuk mikrovlnky, telefonu nebo smíchu!',
@@ -293,7 +349,15 @@ const ANIMALS = [
     },
     facts: [
       'Želvy jsou jedni z nejstarších živočichů na Zemi — existují déle než dinosauři!',
-      'Krunýř želvy je součástí její kostry — je pevně spojený s páteří, nelze ho sundat.'
+      'Krunýř želvy je součástí její kostry — je pevně spojený s páteří, nelze ho sundat.',
+      'Želvy existují na Zemi déle než 220 milionů let.',
+      'Mořská želva se vždy vrátí na pláž, kde se narodila — i po 30 letech.',
+      'Pohlaví želvy závisí na teplotě při líhnutí — teplo = samičky.',
+      'Želvy slyší nízkofrekvenční zvuky, které my neslyšíme.',
+      'Suchozemská želva neplave — v hluboké vodě by se utopila.',
+      'Nejstarší zaznamenaná želva se dožila 255 let.',
+      'Želva zatáhne hlavu do krunýře za méně než sekundu.',
+      'Krunýř želvy obsahuje přes 60 kostí spojených dohromady.'
     ],
     funFacts: [
       'Některé želvy se dožijí přes 150 let — mohly by žít od dob tvých praprapraprababiček!',
@@ -330,7 +394,15 @@ const ANIMALS = [
     },
     facts: [
       'Ryby mají boční linii — speciální smyslový orgán, kterým cítí pohyb vody kolem sebe.',
-      'Ryby "dýchají" vodu — žábry z ní vytáhnou kyslík, stejně jako my z vzduchu.'
+      'Ryby "dýchají" vodu — žábry z ní vytáhnou kyslík, stejně jako my z vzduchu.',
+      'Ryby nemají hlasivky, ale vydávají zvuky pomocí plynového měchýře.',
+      'Některé ryby mění pohlaví během života — podle potřeby hejna.',
+      'Ryby mají šupiny jako letokruhy stromů — lze z nich odečíst věk.',
+      'Létající ryba dokáže plachtit nad vodou až 45 sekund.',
+      'Ryby spí, ale ne jako my — nemají víčka a sníží jen aktivitu.',
+      'Mořský koník je jediná ryba, kde mládě nosí samec.',
+      'Piranhy nejsou tak nebezpečné jak se říká — útočí jen když mají hlad.',
+      'Nejmenší ryba světa je dlouhá jen 8 mm — menší než nehet.'
     ],
     funFacts: [
       'Zlatá rybka si pamatuje věci déle než 3 měsíce — ten mýtus o 3 vteřinách není pravda!',
@@ -367,7 +439,15 @@ const ANIMALS = [
     },
     facts: [
       'Ježek má na těle až 6 000 ostných trnů — každý trn je dutý a velmi pevný.',
-      'Ježci jsou imunní vůči jedu mnoha hadů — had jim prakticky nemůže ublížit!'
+      'Ježci jsou imunní vůči jedu mnoha hadů — had jim prakticky nemůže ublížit!',
+      'Ježci jsou noční živočichové — přes den spí schovaní.',
+      'Ježek v zimě hibernuje — jeho tep klesne z 190 na 20 tepů za minutu.',
+      'Ježek uběhne za noc až 3 km při hledání potravy.',
+      'Mládě ježka se rodí s trny schovanými pod kůží — aby neublížilo matce.',
+      'Ježci jsou odolní vůči mnoha jedům včetně jedu zmije.',
+      'Ježek vydá různé zvuky — funí, cvičí a křičí při nebezpečí.',
+      'Ježci mají přirozené predátory — sovy a jezevce.',
+      'Ježek srolovaný do kuličky je chráněn ze všech stran — nemá slabé místo.'
     ],
     funFacts: [
       'Ježci si natírají trny slinami s cizími pachy — vědci dodnes neví přesně proč!',
@@ -404,7 +484,15 @@ const ANIMALS = [
     },
     facts: [
       'Leopard je nejsilnější velká kočkovitá šelma — dokáže vylézt na strom s kořistí těžší než on sám.',
-      'Každý leopard má unikátní vzor skvrn — stejně jako my otisky prstů, žádní dva nejsou stejní.'
+      'Každý leopard má unikátní vzor skvrn — stejně jako my otisky prstů, žádní dva nejsou stejní.',
+      'Leopard je nejlepší šplhač mezi velkými kočkami.',
+      'Leopardi jsou samotáři — každý má své území, které brání.',
+      'Leopard dokáže vidět v noci 7× lépe než člověk.',
+      'Leopard unese kořist těžší než sám sebe na strom — aby ji ochránil před hyenami.',
+      'Černý panter není jiný druh — je to leopard s tmavým zbarvením.',
+      'Leopard dokáže běžet až 58 km/h a skočit 3 metry do výšky.',
+      'Leopardi jsou velmi tiší — jejich řev slyšíte až ze 3 km.',
+      'Leopard loví přes 90 různých druhů zvířat — je to velký oportunista.'
     ],
     funFacts: [
       'Leopardi umí plavat a docela to baví — někdy loví ryby přímo ve vodě!',

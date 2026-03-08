@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>e-zvířátka</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,10 +23,19 @@
       </div>
     </div>
   </div>
+  <script src="js/analytics.js" defer></script>
   <script src="js/i18n.js" defer></script>
   <script src="js/animals.js" defer></script>
   <script src="js/storage.js" defer></script>
   <script src="js/game.js" defer></script>
   <script src="js/app.js" defer></script>
+  <!-- Google Analytics — nahraď G-XXXXXXXXXX svým Measurement ID z analytics.google.com -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
 </body>
 </html>

@@ -24,6 +24,9 @@ const App = (function() {
     const app = document.getElementById('app');
     app.innerHTML = '';
     I18n.updateLangSwitcher();
+    // Lang switcher only visible on splash
+    var _ls = document.getElementById('lang-switcher');
+    if (_ls) _ls.style.display = (screen === 'SPLASH') ? '' : 'none';
 
     const div = document.createElement('div');
     div.className = 'screen screen-enter';
@@ -327,9 +330,12 @@ const App = (function() {
   function _renderUnlockNotify(params) {
     var lang        = I18n.getCurrentLang();
     var curAnimal   = getAnimalById(params.currentAnimalId);
-    var accusative  = curAnimal
-      ? (lang === 'en' ? curAnimal.accusativeEN : curAnimal.accusativeCS)
-      : (params.currentAnimalId || '');
+    var state       = Storage.load();
+    var curAnimalSt = state.animals[params.currentAnimalId];
+    var petName     = curAnimalSt && curAnimalSt.petName;
+    var accusative  = petName
+      ? petName
+      : (curAnimal ? (lang === 'en' ? curAnimal.accusativeEN : curAnimal.accusativeCS) : (params.currentAnimalId || ''));
 
     var msg = lang === 'en'
       ? 'You take great care of ' + accusative + '! \uD83C\uDF1F'
@@ -449,6 +455,7 @@ const App = (function() {
   function _attachListeners(screen, params) {
     switch (screen) {
       case 'SPLASH':
+        Analytics.trackAppOpen();
         document.getElementById('btn-start') &&
           document.getElementById('btn-start').addEventListener('click', function() {
             const state = Storage.load();
@@ -503,6 +510,7 @@ const App = (function() {
             if (s.animals[params.animalId]) {
               s.animals[params.animalId].petName = petName;
               Storage.save(s);
+              Analytics.track('pet_named', { animal_id: params.animalId, pet_name: petName });
             }
             navigate('CARE', { animalId: params.animalId });
           });
@@ -605,6 +613,8 @@ const App = (function() {
     document.querySelectorAll('.color-swatch[data-type="hairColor"]').forEach(function(btn) {
       btn.addEventListener('click', function() {
         av.hairColor = parseInt(btn.dataset.idx, 10);
+        var HUE = [0,30,60,150,200,270];
+        console.log('[Avatar] Barva vlasů změněna:', av.hairColor, '→ hue-rotate(' + (HUE[av.hairColor]||0) + 'deg)');
         markActive('.color-swatch[data-type="hairColor"]', av.hairColor, 'idx');
         updatePreview();
       });
@@ -623,6 +633,8 @@ const App = (function() {
     document.querySelectorAll('.color-swatch[data-type="clothingColor"]').forEach(function(btn) {
       btn.addEventListener('click', function() {
         av.clothingColor = parseInt(btn.dataset.idx, 10);
+        var HUE = [0,30,60,150,200,270];
+        console.log('[Avatar] Barva oblečení změněna:', av.clothingColor, '→ hue-rotate(' + (HUE[av.clothingColor]||0) + 'deg)');
         markActive('.color-swatch[data-type="clothingColor"]', av.clothingColor, 'idx');
         updatePreview();
       });
@@ -715,6 +727,8 @@ const App = (function() {
           _refreshChargeButtons(animalId);
           return;
         }
+
+        Analytics.track('action_performed', { animal_id: animalId, action: action });
 
         // Update happiness UI
         var bar  = document.getElementById('happiness-bar');
@@ -813,6 +827,22 @@ const App = (function() {
     setTimeout(function() { bubble.classList.remove('visible'); }, duration || 1500);
   }
 
+  // ─── Helpers ─────────────────────────────────────────────────────────────────
+
+  // Pick 2 random items from arr, avoiding last shown indices (sessionStorage)
+  function _pickRandom2(arr, sessionKey) {
+    if (!arr || arr.length === 0) return [];
+    if (arr.length <= 2) return arr.slice();
+    var last = [];
+    try { last = JSON.parse(sessionStorage.getItem(sessionKey) || '[]'); } catch(e) {}
+    var pool = arr.map(function(_, i) { return i; }).filter(function(i) { return last.indexOf(i) === -1; });
+    if (pool.length < 2) pool = arr.map(function(_, i) { return i; });
+    pool.sort(function() { return Math.random() - 0.5; });
+    var picks = [pool[0], pool[1 < pool.length ? 1 : 0]];
+    try { sessionStorage.setItem(sessionKey, JSON.stringify(picks)); } catch(e) {}
+    return [arr[picks[0]], arr[picks[1]]];
+  }
+
   // ─── NAME ANIMAL screen ──────────────────────────────────────────────────────
 
   function _renderNameAnimal(params) {
@@ -848,19 +878,26 @@ const App = (function() {
 
     var lang        = I18n.getCurrentLang();
     var species     = I18n.t('animal_' + animalId);
-    var petName     = animalSt.petName || species;
-    var displayName = animalSt.petName ? (animalSt.petName + ' \u2022 ' + species) : species;
-    var goLabel     = lang === 'en' ? 'Go to ' + petName + ' \u2192' : 'J\u00edt za ' + petName + ' \u2192';
+    var petName     = animalSt.petName;
+    var displayName = petName ? (petName + ' \u2022 ' + species) : species;
+    // "Jít za X" — with name: use name; without: use accusative form
+    var goName      = petName
+      ? petName.toUpperCase()
+      : (lang === 'en'
+          ? animal.accusativeEN.toUpperCase()
+          : ('ZA ' + animal.accusativeCS).toUpperCase().replace('ZA ZA ','ZA '));
+    var goLabel     = lang === 'en' ? 'GO TO ' + goName + ' \u2192' : 'J\u00cdT ' + goName + ' \u2192';
     var closeLabel  = lang === 'en' ? 'Close' : 'Zav\u0159\u00edt';
     var factsTitle  = lang === 'en' ? '📚 Did you know...' : '📚 V\u011bd\u011bl/a jsi, \u017ee...';
     var funTitle    = lang === 'en' ? '😄 Fun fact!' : '😄 Z\u00e1bavn\u00e9!';
     var renameLabel = lang === 'en' ? 'Rename' : 'P\u0159ejmenovat';
 
-    var facts    = animal.facts    || [];
-    var funFacts = animal.funFacts || [];
+    // Random 2 from facts, 2 from funFacts — avoid repeating last pair
+    var shownFacts   = _pickRandom2(animal.facts    || [], '_lastFacts_'    + animalId);
+    var shownFunFacts = _pickRandom2(animal.funFacts || [], '_lastFunFacts_' + animalId);
 
-    var factsHTML   = facts.map(function(f)    { return '<li class="fact-item">' + f + '</li>'; }).join('');
-    var funHTML     = funFacts.map(function(f) { return '<li class="fact-item fun">' + f + '</li>'; }).join('');
+    var factsHTML   = shownFacts.map(function(f)    { return '<li class="fact-item">' + f + '</li>'; }).join('');
+    var funHTML     = shownFunFacts.map(function(f) { return '<li class="fact-item fun">' + f + '</li>'; }).join('');
 
     var overlay = document.createElement('div');
     overlay.id = 'animal-detail-overlay';

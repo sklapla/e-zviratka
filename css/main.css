@@ -2,6 +2,9 @@
    ZvířecíSvět / PetWorld — main.css
    ═══════════════════════════════════════════════════════════ */
 
+/* ── No double-tap zoom on iOS ──────────────────────────── */
+* { touch-action: manipulation; }
+
 /* ── Custom Properties ──────────────────────────────────── */
 :root {
   --color-primary:   #FF6B6B;

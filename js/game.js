@@ -146,11 +146,9 @@ const Game = (function() {
     const animal = state.animals[_activeAnimalId];
     if (!animal) return;
 
-    if (animal.happiness <= 40) {
-      // Animal not happy enough — defer and hint
-      _scheduleReward(state);
+    // Low happiness hint — but never block the reward
+    if (animal.happiness < 20) {
       if (_callbacks.onNeedMoreCare) _callbacks.onNeedMoreCare();
-      return;
     }
 
     _triggerReward(state);
