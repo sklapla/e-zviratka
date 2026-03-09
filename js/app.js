@@ -936,8 +936,8 @@ const App = (function() {
     div.innerHTML =
       '<p style="font-size:12px;margin:0 0 10px">Nechtěl/a jsi zadat <strong>' + _escapeHtml(suggestion) + '</strong>? 😄</p>' +
       '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">' +
-        '<button class="btn-primary" id="btn-filter-yes" style="font-size:11px;padding:8px 12px">Ano, ' + _escapeHtml(suggestion) + '!</button>' +
-        '<button class="btn-secondary" id="btn-filter-no" style="font-size:11px;padding:8px 12px">Ne, chci ' + _escapeHtml(badName) + '</button>' +
+        '<button class="btn-primary" id="btn-filter-yes" style="font-size:11px;padding:8px 12px">Ano! ✓</button>' +
+        '<button class="btn-secondary" id="btn-filter-no" style="font-size:11px;padding:8px 12px">Ne, chci toto jméno</button>' +
       '</div>';
 
     nameBtn.parentNode.insertBefore(div, nameBtn);
