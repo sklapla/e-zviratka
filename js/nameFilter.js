@@ -114,6 +114,9 @@ const BANNED_CLEAN = [...new Set(BANNED)].filter(w => w.length >= 3);
 // Nevinná slova která by mohla být falešně zachycena
 const EXCEPTIONS = ['ptak', 'ptacek', 'ocas', 'suka', 'osel'];
 
+// Bezpečná vstupní jména obsahující zakázaný podřetězec (false positives)
+const SAFE_NAMES = ['opic'];
+
 const _SUGGESTIONS = [
   'Kulička','Hvězdička','Bublinka','Chomáček','Chlupáček',
   'Flekatec','Flíček','Šikulka','Mazlíček','Chlupatec',
@@ -123,6 +126,7 @@ const _SUGGESTIONS = [
 
 function checkName(name) {
   const norm = normalize(name);
+  if (SAFE_NAMES.some(function(s) { return norm.includes(s); })) return { ok: true };
   const found = BANNED_CLEAN.find(function(word) {
     if (EXCEPTIONS.includes(word)) return false;
     return norm.includes(word);
