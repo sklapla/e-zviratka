@@ -3,6 +3,8 @@
 // SPA router and all screen renderers
 // ═══════════════════════════════════════════════════════════
 
+const APP_VERSION = 'v1.8';
+
 const App = (function() {
   let _currentScreen = null;
   let _currentParams = {};
@@ -1326,4 +1328,6 @@ const App = (function() {
 
 document.addEventListener('DOMContentLoaded', function() {
   App.init();
+  var badge = document.getElementById('version-badge');
+  if (badge) badge.textContent = APP_VERSION;
 });

@@ -525,6 +525,20 @@ input[type="text"]:focus {
   line-height: 1.8;
 }
 
+/* ── Version badge ──────────────────────────────────────── */
+#version-badge {
+  position: fixed;
+  bottom: 18px;
+  right: 54px;
+  z-index: 200;
+  font-family: var(--font-body);
+  font-size: 10px;
+  color: var(--color-text-dim);
+  opacity: 0.4;
+  pointer-events: none;
+  line-height: 36px;
+}
+
 /* ── Dev reset button ───────────────────────────────────── */
 #btn-dev-reset {
   position: fixed;
