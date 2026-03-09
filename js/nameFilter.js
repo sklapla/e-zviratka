@@ -13,9 +13,9 @@ function _normalizeName(str) {
 }
 
 var _BANNED = [
-  'mrdka','mrdak','mrdas','mrdat','mrdacka','mrdani',
+  'mrd','mrdka','mrdak','mrdas','mrdat','mrdacka','mrdani',
   'pica','picka','picicka','pic','picu','pici','picat','picani','picovina','picovity',
-  'kunda','kundicka','kundak',
+  'kund','kunda','kundicka','kundak',
   'kokot','kokotek','kokotec','kokotina','kokotko',
   'kurva','kurvicka','kurvak','kurvit','kurvin','kurvina',
   'zkurvit','zkurveny','zkurvysyn','prokurva','skurvak','skurvenec',
