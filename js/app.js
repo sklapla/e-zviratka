@@ -414,7 +414,8 @@ const App = (function() {
       '</div>' +
       '<p style="font-size:12px;color:var(--color-text-dim);margin-bottom:8px">' + I18n.t('animals_count', unlockedCount) + '</p>' +
       '<div class="animals-grid">' + (cards || '<p style="color:var(--color-text-dim)">No animals yet</p>') + '</div>' +
-      '<div style="height:16px"></div>';
+      '<div style="height:8px"></div>' +
+      '<button class="btn-secondary" id="btn-hall-of-fame" style="width:100%;font-size:12px;margin-bottom:16px">🏆 Síň slávy</button>';
   }
 
   // ─── UNLOCK STARS animation ──────────────────────────────────────────────────
@@ -545,18 +546,15 @@ const App = (function() {
           nameBtn.addEventListener('click', function() {
             var petName = nameInput ? nameInput.value.trim() : '';
             if (!petName || !selectedGender) return;
-            var s = Storage.load();
-            if (s.animals[params.animalId]) {
-              s.animals[params.animalId].petName   = petName;
-              s.animals[params.animalId].petGender = selectedGender;
-              Storage.save(s);
-              trackEvent('animal_named', {
-                animalId:   params.animalId,
-                petName:    petName,
-                avatarName: s.avatar ? s.avatar.name : ''
-              });
+
+            // Filtr nevhodných jmen
+            var filterResult = checkName(petName);
+            if (!filterResult.ok) {
+              _showNameFilterPrompt(petName, filterResult.suggestion, nameInput, nameBtn);
+              return;
             }
-            navigate('CARE', { animalId: params.animalId });
+
+            _confirmPetName(petName, selectedGender, params.animalId);
           });
         }
         break;
@@ -589,6 +587,8 @@ const App = (function() {
           document.getElementById('btn-to-select').addEventListener('click', function() {
             navigate('ANIMAL_SELECT');
           });
+        document.getElementById('btn-hall-of-fame') &&
+          document.getElementById('btn-hall-of-fame').addEventListener('click', _showHallOfFame);
         break;
 
       case 'LEOPARD':
@@ -920,6 +920,65 @@ const App = (function() {
     return [arr[picks[0]], arr[picks[1]]];
   }
 
+  // ─── Name filter prompt ──────────────────────────────────────────────────────
+
+  function _showNameFilterPrompt(badName, suggestion, nameInput, nameBtn) {
+    var existing = document.getElementById('name-filter-prompt');
+    if (existing) existing.remove();
+
+    var suggestionClean = suggestion.replace(/\s*[^\w\s\u00C0-\u024F]/g, '').trim();
+
+    var div = document.createElement('div');
+    div.id = 'name-filter-prompt';
+    div.style.cssText = 'background:var(--color-surface2);border-radius:8px;padding:12px;margin-top:8px;text-align:center;max-width:280px';
+    div.innerHTML =
+      '<p style="font-size:12px;margin:0 0 10px">Nechtěl/a jsi zadat <strong>' + _escapeHtml(suggestion) + '</strong>? 😄</p>' +
+      '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">' +
+        '<button class="btn-primary" id="btn-filter-yes" style="font-size:11px;padding:8px 12px">Ano, ' + _escapeHtml(suggestion) + '!</button>' +
+        '<button class="btn-secondary" id="btn-filter-no" style="font-size:11px;padding:8px 12px">Ne, chci ' + _escapeHtml(badName) + '</button>' +
+      '</div>';
+
+    nameBtn.parentNode.insertBefore(div, nameBtn);
+
+    document.getElementById('btn-filter-yes').addEventListener('click', function() {
+      nameInput.value = suggestionClean;
+      div.remove();
+    });
+    document.getElementById('btn-filter-no').addEventListener('click', function() {
+      div.remove();
+      // Pokračuj bez zahrnutí do Síně slávy — označíme jako neschválené
+      var s = Storage.load();
+      var petName = nameInput.value.trim();
+      var sg = document.querySelector('.pet-gender-btn.active-acc');
+      var gender = sg ? sg.dataset.gender : 'male';
+      if (s.animals[_currentParams.animalId]) {
+        s.animals[_currentParams.animalId].petName      = petName;
+        s.animals[_currentParams.animalId].petGender    = gender;
+        s.animals[_currentParams.animalId].hofApproved  = false;
+        Storage.save(s);
+      }
+      navigate('CARE', { animalId: _currentParams.animalId });
+    });
+  }
+
+  function _confirmPetName(petName, gender, animalId) {
+    var s = Storage.load();
+    if (s.animals[animalId]) {
+      s.animals[animalId].petName    = petName;
+      s.animals[animalId].petGender  = gender;
+      s.animals[animalId].hofApproved = true;
+      Storage.save(s);
+      trackEvent('animal_named', {
+        animalId:   animalId,
+        petName:    petName,
+        avatarName: s.avatar ? s.avatar.name : ''
+      });
+    }
+    // AI skloňování + HoF zápis asynchronně (neblokuje přechod)
+    getInflectedName(petName, gender).catch(function() {});
+    navigate('CARE', { animalId: animalId });
+  }
+
   // ─── NAME ANIMAL screen ──────────────────────────────────────────────────────
 
   function _renderNameAnimal(params) {
@@ -983,9 +1042,9 @@ const App = (function() {
     var funTitle    = lang === 'en' ? '😄 Fun fact!' : '😄 Z\u00e1bavn\u00e9!';
     var renameLabel = lang === 'en' ? 'Rename' : 'P\u0159ejmenovat';
 
-    // Random 2 from facts, 2 from funFacts — avoid repeating last pair
-    var shownFacts   = _pickRandom2(animal.facts    || [], '_lastFacts_'    + animalId);
-    var shownFunFacts = _pickRandom2(animal.funFacts || [], '_lastFunFacts_' + animalId);
+    // Random 2 from facts pool (avoid repeating last pair); funFacts always first 2, never rotate
+    var shownFacts   = _pickRandom2(animal.facts || [], '_lastFacts_' + animalId);
+    var shownFunFacts = (animal.funFacts || []).slice(0, 2);
 
     var factsHTML   = shownFacts.map(function(f)    { return '<li class="fact-item">' + f + '</li>'; }).join('');
     var funHTML     = shownFunFacts.map(function(f) { return '<li class="fact-item fun">' + f + '</li>'; }).join('');
@@ -1015,6 +1074,16 @@ const App = (function() {
       '</div>';
 
     document.body.appendChild(overlay);
+
+    // AI skloňování — asynchronně zlepší tlačítko pokud je jméno
+    if (petName && lang === 'cs') {
+      getInflectedName(petName, petGender || 'male').then(function(data) {
+        var goBtn = document.getElementById('btn-go-to-care-detail');
+        if (goBtn && data.inflected) {
+          goBtn.textContent = 'JÍT ZA ' + data.inflected.toUpperCase() + ' \u2192';
+        }
+      }).catch(function() {});
+    }
 
     // Close
     document.getElementById('btn-close-detail').addEventListener('click', function() { overlay.remove(); });
@@ -1066,6 +1135,50 @@ const App = (function() {
         if (e.key === 'Enter') document.getElementById('btn-save-petname').click();
       });
     });
+  }
+
+  // ─── Hall of Fame modal ───────────────────────────────────────────────────────
+
+  function _showHallOfFame() {
+    var overlay = document.createElement('div');
+    overlay.className = 'animal-detail-overlay';
+    overlay.innerHTML =
+      '<div class="animal-detail-modal" style="text-align:center">' +
+        '<h2 style="font-size:14px;margin-bottom:4px">🏆 Síň slávy</h2>' +
+        '<p style="font-size:11px;color:var(--color-text-dim);margin-bottom:16px">Jak ostatní pojmenovali mazlíčky</p>' +
+        '<div id="hof-content"><p style="color:var(--color-text-dim)">Načítám síň slávy... 🏆</p></div>' +
+        '<button class="btn-secondary" id="btn-close-hof" style="margin-top:16px;width:100%">Zavřít</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+    document.getElementById('btn-close-hof').addEventListener('click', function() { overlay.remove(); });
+
+    fetch('https://e-zviratka-analytics.sklapla.workers.dev/hall-of-fame')
+      .then(function(r) { return r.json(); })
+      .then(function(entries) {
+        var content = document.getElementById('hof-content');
+        if (!content) return;
+        if (!entries || entries.length === 0) {
+          content.innerHTML = '<p style="color:var(--color-text-dim)">Zatím žádná jména 🐾</p>';
+          return;
+        }
+        var html = '<ul style="list-style:none;padding:0;margin:0;text-align:left">';
+        entries.slice(0, 20).forEach(function(e) {
+          var animalEmoji = '🐾';
+          var countText = e.count === 1 ? 'zatím jen ty!' : e.count + ' hráčů';
+          html += '<li style="padding:6px 0;border-bottom:1px solid var(--color-surface2);font-size:13px">' +
+            animalEmoji + ' <strong>' + _escapeHtml(e.name) + '</strong>' +
+            ' <span style="color:var(--color-text-dim);font-size:11px">— ' + countText + '</span>' +
+          '</li>';
+        });
+        html += '</ul>';
+        content.innerHTML = html;
+      })
+      .catch(function() {
+        var content = document.getElementById('hof-content');
+        if (content) content.innerHTML = '<p style="color:var(--color-text-dim)">Síň slávy je momentálně nedostupná 😢</p>';
+      });
   }
 
   // ─── Confetti ─────────────────────────────────────────────────────────────────

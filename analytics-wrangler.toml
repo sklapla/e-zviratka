@@ -5,3 +5,7 @@ compatibility_date = "2025-09-27"
 [[analytics_engine_datasets]]
 binding = "ANALYTICS"
 dataset = "ez-analytics"
+
+[[kv_namespaces]]
+binding = "INFLECTION_CACHE"
+id = "0a43d1b6cbc142c199e0440c4a3475b9"
