@@ -3,7 +3,7 @@
 // SPA router and all screen renderers
 // ═══════════════════════════════════════════════════════════
 
-const APP_VERSION = 'v1.8';
+const APP_VERSION = 'v1.9';
 
 const App = (function() {
   let _currentScreen = null;
